@@ -2,9 +2,9 @@ package release
 
 import (
 	"encoding/json"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestExtractTarURL(t *testing.T) {
