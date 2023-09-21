@@ -4,6 +4,8 @@ import (
 	"os"
 	"testing"
 
+	"slices"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,4 +26,10 @@ func LoadFile(t *testing.T, name string) []byte {
 		t.Errorf("Cannot open test file: %s", name)
 	}
 	return data
+}
+
+func TestList(t *testing.T) {
+	r := NewRelease("haproxytech/dataplaneapi", "")
+	r.Setup()
+	assert.True(t, slices.Contains(r.ListAssets(), "dataplaneapi_2.8.1_linux_x86_64.tar.gz"))
 }
