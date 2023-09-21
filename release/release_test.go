@@ -1,22 +1,18 @@
 package release
 
 import (
-	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExtractTarURL(t *testing.T) {
 	testFile := "../testdata/latest_releases.json"
 	data := LoadFile(t, testFile)
-	list := make(map[string]any)
-	err := json.Unmarshal(data, &list)
-	if err != nil {
-		t.Errorf("Cannot unmarshal test file: %s", testFile)
-	}
 	r := NewRelease("", "staticcheck_linux_amd64.tar.gz")
-	r.SetList(list)
+	assets := r.GetAssets(data)
+	r.SetAssets(assets)
 	tarURL := r.ExtractTarURL()
 	t.Logf("tarURL: %v", tarURL)
 	assert.Equal(t, tarURL, "https://github.com/dominikh/go-tools/releases/download/2023.1.6/staticcheck_linux_amd64.tar.gz")

@@ -12,6 +12,7 @@ import (
 func init() {
 	rootCmd.AddCommand(
 		getCmd,
+		listCmd,
 		versionCmd,
 	)
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
