@@ -31,5 +31,5 @@ func LoadFile(t *testing.T, name string) []byte {
 func TestList(t *testing.T) {
 	r := NewRelease("haproxytech/dataplaneapi", "")
 	r.Setup()
-	assert.True(t, slices.Contains(r.ListAssets(), "dataplaneapi_2.8.1_linux_x86_64.tar.gz"))
+	assert.True(t, slices.Contains(r.Assets.Names(), "dataplaneapi_2.8.1_linux_x86_64.tar.gz"))
 }

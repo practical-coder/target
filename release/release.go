@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"time"
 
 	"github.com/rs/zerolog/log"
 )
@@ -15,17 +14,7 @@ type Release struct {
 	URL     string
 	TarName string
 	TarURL  string
-	Assets  []Asset
-}
-
-type Asset struct {
-	URL                string    `json:"url"`
-	Name               string    `json:"name"`
-	ContentType        string    `json:"content_type"`
-	Size               int       `json:"size"`
-	CreatedAt          time.Time `json:"created_at"`
-	UpdatedAt          time.Time `json:"updated_at"`
-	BrowserDownloadURL string    `json:"browser_download_url"`
+	Assets  Assets
 }
 
 func NewRelease(repo string, tarName string) *Release {
@@ -76,14 +65,7 @@ func (r *Release) SetTarURL(url string) {
 }
 
 func (r *Release) ExtractTarURL() string {
-	var tarURL string
-	for _, a := range r.Assets {
-		if a.Name == r.TarName {
-			tarURL = a.BrowserDownloadURL
-			break
-		}
-	}
-	return tarURL
+	return r.Assets.GetURL(r.TarName)
 }
 
 func (r *Release) Setup() {
@@ -92,13 +74,4 @@ func (r *Release) Setup() {
 	r.SetAssets(assets)
 	url := r.ExtractTarURL()
 	r.SetTarURL(url)
-}
-
-func (r *Release) ListAssets() []string {
-	urls := make([]string, 0, len(r.Assets))
-	for _, a := range r.Assets {
-		urls = append(urls, a.Name)
-	}
-
-	return urls
 }

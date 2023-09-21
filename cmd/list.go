@@ -26,7 +26,7 @@ var listCmd = &cobra.Command{
 		}
 		r := release.NewRelease(repo, "")
 		r.Setup()
-		for _, n := range r.ListAssets() {
+		for _, n := range r.Assets.Names() {
 			fmt.Println(n)
 		}
 	},
