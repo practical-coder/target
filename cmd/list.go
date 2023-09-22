@@ -8,7 +8,7 @@ import (
 
 func init() {
 	listCmd.Flags().String("repo", "dominikh/go-tools", "Github Repository Name")
-	listCmd.Flags().String("format", "{{.Name}}\t{{.BrowserDownloadURL}}", "Format assets listing")
+	listCmd.Flags().String("format", "{{.Name}}", "Format assets listing")
 }
 
 var listCmd = &cobra.Command{

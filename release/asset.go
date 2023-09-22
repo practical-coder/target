@@ -2,10 +2,10 @@ package release
 
 import (
 	"fmt"
-	"html/template"
 	"io"
 	"net/http"
 	"os"
+	"text/template"
 	"time"
 
 	"github.com/rs/zerolog/log"
