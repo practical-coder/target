@@ -15,9 +15,10 @@ func init() {
 
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "GET release file",
+	Short: "Get / Download release asset file",
 	Example: `
 		tg get --repo='haproxytech/dataplaneapi' --file='dataplaneapi_2.8.1_linux_x86_64.tar.gz'
+		tg get --repo='dominikh/go-tools' --file='staticcheck_linux_amd64.tar.gz'
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		file, err := cmd.Flags().GetString("file")
