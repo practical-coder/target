@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/practical-coder/target/release"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -10,6 +8,7 @@ import (
 
 func init() {
 	listCmd.Flags().String("repo", "dominikh/go-tools", "Github Repository Name")
+	listCmd.Flags().String("format", "{{.Name}}\t{{.BrowserDownloadURL}}", "Format assets listing")
 }
 
 var listCmd = &cobra.Command{
@@ -24,10 +23,12 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal().Err(err).Msg("Github repository name missing")
 		}
+		format, err := cmd.Flags().GetString("format")
+		if err != nil {
+			log.Info().Err(err).Msg("Format flag error")
+		}
 		r := release.NewRelease(repo, "")
 		r.Setup()
-		for _, n := range r.Assets.Names() {
-			fmt.Println(n)
-		}
+		r.Assets.Format(format)
 	},
 }

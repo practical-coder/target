@@ -2,6 +2,7 @@ package release
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"net/http"
 	"os"
@@ -22,6 +23,17 @@ type Asset struct {
 
 func (a Asset) Get(path string) error {
 	return GetFile(a.URL, path)
+}
+
+func (a Asset) Format(format string) {
+	tmpl, err := template.New("asset").Parse(format)
+	if err != nil {
+		log.Logger.Info().Err(err).Msg("asset template error")
+	}
+	err = tmpl.Execute(os.Stdout, a)
+	if err != nil {
+		log.Logger.Fatal().Err(err).Msg("asset template execute error")
+	}
 }
 
 type Assets []Asset
@@ -87,4 +99,11 @@ func GetFile(url string, filepath string) error {
 	}
 
 	return nil
+}
+
+func (assets Assets) Format(format string) {
+	for _, a := range assets {
+		a.Format(format)
+		fmt.Println()
+	}
 }
