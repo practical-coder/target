@@ -1,6 +1,14 @@
 package release
 
-import "time"
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/rs/zerolog/log"
+)
 
 type Asset struct {
 	URL                string    `json:"url"`
@@ -10,6 +18,10 @@ type Asset struct {
 	CreatedAt          time.Time `json:"created_at"`
 	UpdatedAt          time.Time `json:"updated_at"`
 	BrowserDownloadURL string    `json:"browser_download_url"`
+}
+
+func (a Asset) Get(path string) error {
+	return GetFile(a.URL, path)
 }
 
 type Assets []Asset
@@ -32,13 +44,47 @@ func (assets Assets) Names() []string {
 	return names
 }
 
-func (assets Assets) GetURL(name string) string {
-	var url string
+func (assets Assets) FindByName(name string) Asset {
+	var result Asset
 	for _, a := range assets {
 		if a.Name == name {
-			url = a.BrowserDownloadURL
+			result = a
 			break
 		}
 	}
-	return url
+	return result
+}
+
+func (assets Assets) GetURL(name string) string {
+	a := assets.FindByName(name)
+	return a.BrowserDownloadURL
+}
+
+func GetFile(url string, filepath string) error {
+	out, err := os.Create(filepath)
+	if err != nil {
+		log.Info().Err(err).Str("filepath", filepath).Msg("Create file error")
+		return err
+	}
+	defer out.Close()
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		e := fmt.Errorf("bad status: %s", resp.Status)
+		log.Info().Err(e).Str("url", url).Msg("cannot download from the given url")
+		return e
+	}
+
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		log.Info().Err(err).Str("url", url).Str("filepath", filepath).Msg("Cannot copy body to filepath")
+		return err
+	}
+
+	return nil
 }

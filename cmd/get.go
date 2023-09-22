@@ -30,6 +30,7 @@ var getCmd = &cobra.Command{
 		}
 		r := release.NewRelease(repo, file)
 		r.Setup()
-		fmt.Println(r.TarURL)
+		a := r.Assets.FindByName(r.TarName)
+		a.Get(fmt.Sprintf("./%s", r.TarName))
 	},
 }
