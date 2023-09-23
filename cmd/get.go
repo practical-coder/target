@@ -9,7 +9,6 @@ import (
 )
 
 func init() {
-	getCmd.Flags().String("repo", "dominikh/go-tools", "Github Repository Name")
 	getCmd.Flags().String("file", "staticcheck_linux_amd64.tar.gz", "Asset file name to download")
 }
 
