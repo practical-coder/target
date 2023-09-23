@@ -79,8 +79,11 @@ dataplaneapi_2.8.1_linux_s390x.tar.gz
 dataplaneapi_2.8.1_linux_x86_64.tar.gz
 ```
 
-By default output formatting shows just a name of an asset.
-It is possible to specify custom formatting for the output.
+### List assets with custom formatting
+
+By default output formatting shows just a name of an asset.  
+It is possible to specify custom formatting for the output using `--format`.  
+Format flag is using standard Go Templates syntax.
 
 ```bash
 target list --repo 'haproxytech/dataplaneapi' --format='{{printf "%s\t\t%s" .Name .BrowserDownloadURL}}'
