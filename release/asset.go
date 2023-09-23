@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"regexp"
 	"text/template"
 	"time"
 
@@ -60,6 +61,21 @@ func (assets Assets) FindByName(name string) Asset {
 	var result Asset
 	for _, a := range assets {
 		if a.Name == name {
+			result = a
+			break
+		}
+	}
+	return result
+}
+
+func (assets Assets) FindByPattern(pattern string) Asset {
+	r, err := regexp.Compile(pattern)
+	if err != nil {
+		log.Fatal().Err(err).Str("pattern", pattern).Msg("FindByPattern error")
+	}
+	var result Asset
+	for _, a := range assets {
+		if r.MatchString(a.Name) {
 			result = a
 			break
 		}

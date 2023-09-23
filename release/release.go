@@ -72,6 +72,4 @@ func (r *Release) Setup() {
 	data := r.GetList()
 	assets := r.GetAssets(data)
 	r.SetAssets(assets)
-	url := r.ExtractTarURL()
-	r.SetTarURL(url)
 }
