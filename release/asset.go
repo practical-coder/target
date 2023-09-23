@@ -23,7 +23,7 @@ type Asset struct {
 }
 
 func (a Asset) Get(path string) error {
-	return GetFile(a.URL, path)
+	return GetFile(a.BrowserDownloadURL, path)
 }
 
 func (a Asset) Format(format string) {
