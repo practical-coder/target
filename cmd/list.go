@@ -15,8 +15,8 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List release assets",
 	Example: `
-		tg list --repo='haproxytech/dataplaneapi'
-		tg list --repo='dominikh/go-tools'
+		target list --repo='haproxytech/dataplaneapi'
+		target list --repo='dominikh/go-tools'
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		repo, err := cmd.Flags().GetString("repo")

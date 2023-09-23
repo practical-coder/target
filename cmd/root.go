@@ -19,7 +19,7 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "tg",
+	Use:   "target",
 	Short: "TarGET - download latest github project release",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
