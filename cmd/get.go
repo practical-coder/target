@@ -9,7 +9,8 @@ import (
 )
 
 func init() {
-	getCmd.Flags().String("file", "staticcheck_linux_amd64.tar.gz", "Asset file name to download")
+	getCmd.Flags().String("file", "", "Asset file name to download")
+	getCmd.Flags().String("pattern", "", "Regular expression pattern matching asset file name to download")
 }
 
 var getCmd = &cobra.Command{
@@ -20,17 +21,40 @@ var getCmd = &cobra.Command{
 		target get --repo='dominikh/go-tools' --file='staticcheck_linux_amd64.tar.gz'
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		file, err := cmd.Flags().GetString("file")
-		if err != nil {
-			log.Fatal().Err(err).Msg("Asset filename missing")
-		}
+
 		repo, err := cmd.Flags().GetString("repo")
 		if err != nil {
 			log.Fatal().Err(err).Msg("Github repository name missing")
 		}
+		pattern, err := cmd.Flags().GetString("pattern")
+		if pattern != "" && err != nil {
+			log.Info().Err(err).Msg("Pattern flag error")
+		}
+
+		file, err := cmd.Flags().GetString("file")
+		if file != "" && err != nil {
+			log.Fatal().Err(err).Msg("Asset filename error")
+		}
+
+		if file != "" && pattern != "" {
+			log.Fatal().Err(err).
+				Str("file", file).
+				Str("pattern", pattern).
+				Msg("--file and --pattern provided! Only one of those flags can be in use")
+		}
+
 		r := release.NewRelease(repo, file)
 		r.Setup()
-		a := r.Assets.FindByName(r.TarName)
-		a.Get(fmt.Sprintf("./%s", r.TarName))
+
+		if file != "" {
+			a := r.Assets.FindByName(file)
+			a.Get(fmt.Sprintf("./%s", a.Name))
+			return
+		}
+
+		if pattern != "" {
+			a := r.Assets.FindByPattern(pattern)
+			a.Get(fmt.Sprintf("./%s", a.Name))
+		}
 	},
 }
