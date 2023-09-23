@@ -16,6 +16,8 @@ func init() {
 		versionCmd,
 	)
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	rootCmd.PersistentFlags().String("repo", "haproxytech/dataplaneapi", "Github Repository Name")
+	rootCmd.PersistentFlags().String("format", "{{.Name}}", "Format assets listing")
 }
 
 var rootCmd = &cobra.Command{
