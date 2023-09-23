@@ -132,3 +132,11 @@ Download asset file to current directory:
 ```bash
 target get --repo 'haproxytech/dataplaneapi' --file='dataplaneapi_2.8.1_linux_x86_64.tar.gz'
 ```
+
+### Get asset file using pattern
+
+Download asset file using regular expression pattern to select particular asset.
+
+```bash
+target get --repo 'haproxytech/dataplaneapi' --pattern='linux_amd64.deb'
+```
